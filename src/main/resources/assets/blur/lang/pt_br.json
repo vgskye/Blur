@@ -3,7 +3,6 @@
   "blur.midnightconfig.blurExclusions": "Desfocar exclusões",
   "blur.midnightconfig.fadeTimeMillis": "Tempo de desvanecimento (em milissegundos)",
   "blur.midnightconfig.ease": "Animação fácil",
-  "blur.midnightconfig.radius": "Raio",
   "blur.midnightconfig.gradientStart": "Cor inicial do gradiente",
   "blur.midnightconfig.gradientEnd": "Cor final do gradiente",
   "blur.midnightconfig.gradientStartAlpha": "Alfa de início gradiente",

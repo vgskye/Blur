@@ -2,14 +2,11 @@ package com.tterrag.blur;
 
 import com.tterrag.blur.config.BlurConfig;
 import eu.midnightdust.lib.util.MidnightColorUtil;
+import ladysnake.satin.api.event.ResolutionChangeCallback;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
-import ladysnake.satin.api.managed.ManagedShaderEffect;
-import ladysnake.satin.api.managed.ShaderEffectManager;
-import ladysnake.satin.api.managed.uniform.Uniform1f;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.Identifier;
 
 import java.util.Objects;
 
@@ -21,18 +18,15 @@ public class Blur implements ClientModInitializer {
     public static String prevScreen;
     public static boolean screenHasBackground;
 
-    private static final ManagedShaderEffect blur = ShaderEffectManager.getInstance().manage(new Identifier(MODID, "shaders/post/fade_in_blur.json"),
-            shader -> shader.setUniformValue("Radius", (float) BlurConfig.radius));
-    private static final Uniform1f blurProgress = blur.findUniform1f("Progress");
-
     @Override
     public void onInitializeClient() {
         BlurConfig.init("blur", BlurConfig.class);
 
+        ResolutionChangeCallback.EVENT.register(DualKawaseEffect::updateBuffers);
+
         ShaderEffectRenderCallback.EVENT.register((deltaTick) -> {
             if (start > 0) {
-                blurProgress.set(getProgress(client.currentScreen != null));
-                blur.render(deltaTick);
+                DualKawaseEffect.render(getProgress(client.currentScreen != null));
             }
         });
     }
@@ -45,14 +39,12 @@ public class Blur implements ClientModInitializer {
             if (!excluded) {
                 screenHasBackground = false;
                 if (BlurConfig.showScreenTitle) System.out.println(newGui.getClass().getName());
-                blur.setUniformValue("Radius", (float) BlurConfig.radius);
                 if (doFade) {
                     start = System.currentTimeMillis();
                     doFade = false;
                 }
                 prevScreen = newGui.getClass().getName();
             } else if (newGui == null && BlurConfig.fadeOutTimeMillis > 0 && !Objects.equals(prevScreen, "")) {
-                blur.setUniformValue("Radius", (float) BlurConfig.radius);
                 start = System.currentTimeMillis();
                 doFade = true;
             } else {

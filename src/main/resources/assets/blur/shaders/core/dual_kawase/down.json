@@ -1,0 +1,18 @@
+{
+    "blend": {
+        "func": "add",
+        "srcrgb": "0",
+        "dstrgb": "1"
+    },
+    "vertex": "blur:dual_kawase/vert",
+    "fragment": "blur:dual_kawase/down",
+    "attributes": [ "Position", "UV0" ],
+    "samplers": [
+        { "name": "DiffuseSampler" }
+    ],
+    "uniforms": [
+        { "name": "ProjMat",     "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
+        { "name": "InSize",      "type": "float",     "count": 2,  "values": [ 1.0, 1.0 ] },
+        { "name": "Offset",      "type": "float",     "count": 1,  "values": [ 1.0 ] }
+    ]
+}
